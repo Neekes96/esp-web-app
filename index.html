@@ -1,55 +1,38 @@
-// Kod dla ESP32/ESP8266 w Arduino IDE
-#include <WiFi.h> // Dla ESP32, dla ESP8266 użyj <ESP8266WiFi.h>
-#include <WebServer.h> // Serwer HTTP
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Web Page</title>
+</head>
+<body>
+  <h1>ESP32 Control</h1>
+  <p>Status urządzenia: <span id="deviceState">Nieznany</span></p>
+  <p>Czujnik: <span id="sensorData">Brak danych</span></p>
+  <button onclick="toggleDevice()">Przełącz urządzenie</button>
 
-// Dane logowania do Wi-Fi
-const char* ssid = "Twoja_Siec";
-const char* password = "Twoje_Haslo";
+  <script>
+    // Funkcja do przełączania stanu urządzenia
+    function toggleDevice() {
+      fetch('/control?state=' + (document.getElementById('deviceState').innerText == "Włączone" ? 0 : 1))
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('deviceState').innerText = data.status == "success" ? "Włączone" : "Wyłączone";
+        });
+    }
 
-WebServer server(80); // Tworzymy serwer na porcie 80
+    // Funkcja do pobierania danych z czujnika
+    function getSensorData() {
+      fetch('/sensor')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('sensorData').innerText = data.sensor;
+          setTimeout(getSensorData, 2000); // Aktualizacja co 2 sekundy
+        });
+    }
 
-// Zmienne do przechowywania stanu urządzenia i danych czujnika
-int deviceState = 0;
-float sensorData = 23.5; // Przykładowe dane, np. temperatura
-
-// Funkcja do obsługi żądania sterowania
-void handleControl() {
-  if (server.hasArg("state")) {
-    deviceState = server.arg("state").toInt();
-    server.send(200, "application/json", "{\"status\":\"success\"}");
-  } else {
-    server.send(400, "application/json", "{\"error\":\"Missing state\"}");
-  }
-}
-
-// Funkcja do wysyłania danych czujnika
-void handleSensorData() {
-  String json = "{\"sensor\":" + String(sensorData) + ",\"device\":" + String(deviceState) + "}";
-  server.send(200, "application/json", json);
-}
-
-void setup() {
-  Serial.begin(115200);
-
-  // Łączymy się z Wi-Fi
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Łączenie z Wi-Fi...");
-  }
-  Serial.println("Połączono z Wi-Fi");
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-
-  // Rejestrujemy endpointy
-  server.on("/control", handleControl);
-  server.on("/sensor", handleSensorData);
-
-  // Uruchamiamy serwer
-  server.begin();
-  Serial.println("Serwer uruchomiony");
-}
-
-void loop() {
-  server.handleClient(); // Obsługa żądań HTTP
-}
+    // Rozpoczęcie pobierania danych z czujnika
+    getSensorData();
+  </script>
+</body>
+</html>
