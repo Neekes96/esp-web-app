@@ -3,36 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESP32 Web Page</title>
+  <title>System podlewania ogródka</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>ESP32 Control</h1>
-  <p>Status urządzenia: <span id="deviceState">Nieznany</span></p>
-  <p>Czujnik: <span id="sensorData">Brak danych</span></p>
-  <button onclick="toggleDevice()">Przełącz urządzenie</button>
+  <header>
+    <h1>System podlewania ogródka</h1>
+    <nav>
+      <a href="current.html">Aktualne dane</a>
+      <a href="charts.html">Wykresy</a>
+      <a href="water.html">Zużycie wody</a>
+    </nav>
+  </header>
 
-  <script>
-    // Funkcja do przełączania stanu urządzenia
-    function toggleDevice() {
-      fetch('/control?state=' + (document.getElementById('deviceState').innerText == "Włączone" ? 0 : 1))
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('deviceState').innerText = data.status == "success" ? "Włączone" : "Wyłączone";
-        });
-    }
+  <main>
+    <section id="control">
+      <h2>Sterowanie</h2>
+      <label class="switch">
+        <input type="checkbox" id="system-toggle">
+        <span class="slider"></span>
+      </label>
+      <p>Status: <span id="system-status">Nieznany</span></p>
+    </section>
 
-    // Funkcja do pobierania danych z czujnika
-    function getSensorData() {
-      fetch('/sensor')
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('sensorData').innerText = data.sensor;
-          setTimeout(getSensorData, 2000); // Aktualizacja co 2 sekundy
-        });
-    }
+    <section id="summary">
+      <h2>Podsumowanie</h2>
+      <p>Średnia wilgotność gleby: <span id="avg-moisture">--</span>%</p>
+      <p>Temperatura: <span id="temperature">--</span>°C</p>
+    </section>
+  </main>
 
-    // Rozpoczęcie pobierania danych z czujnika
-    getSensorData();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
