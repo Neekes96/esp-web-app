@@ -10,9 +10,9 @@
   <header>
     <h1>System podlewania ogródka</h1>
     <nav>
-      <a href="current.html">Aktualne dane</a>
-      <a href="charts.html">Wykresy</a>
-      <a href="water.html">Zużycie wody</a>
+      <a href="#home">Strona główna</a>
+      <a href="#data">Dane</a>
+      <a href="#charts">Wykresy</a>
     </nav>
   </header>
 
@@ -23,15 +23,20 @@
         <input type="checkbox" id="system-toggle">
         <span class="slider"></span>
       </label>
-      <p>Status: <span id="system-status">Nieznany</span></p>
+      <p>Status systemu: <span id="system-status">Wyłączony</span></p>
     </section>
 
-    <section id="summary">
-      <h2>Podsumowanie</h2>
-      <p>Średnia wilgotność gleby: <span id="avg-moisture">--</span>%</p>
+    <section id="data">
+      <h2>Aktualne dane</h2>
+      <p>Wilgotność gleby czujnik 1: <span id="moisture1">--</span>%</p>
+      <p>Wilgotność gleby czujnik 2: <span id="moisture2">--</span>%</p>
       <p>Temperatura: <span id="temperature">--</span>°C</p>
     </section>
   </main>
+
+  <footer>
+    <p>© 2024 System podlewania ogródka</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
