@@ -2,38 +2,46 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
 }
 
 header {
   background-color: #4CAF50;
   color: white;
-  padding: 1em;
+  padding: 20px;
   text-align: center;
 }
 
 nav a {
-  margin: 0 10px;
+  margin: 0 15px;
   color: white;
   text-decoration: none;
 }
 
-main {
-  padding: 1em;
+nav a:hover {
+  text-decoration: underline;
 }
 
-#control {
-  margin: 20px 0;
+main {
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 30px;
 }
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 34px;
 }
 
 .switch input {
-  display: none;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
@@ -65,5 +73,12 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(36px);
+}
+
+footer {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  padding: 10px;
 }
